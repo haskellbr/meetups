@@ -1,4 +1,4 @@
-# meetups
+# haskellbr/meetups
 This is a mega-repository which aggregates as much information as it can about
 HaskellBR meetups.
 
