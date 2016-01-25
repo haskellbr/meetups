@@ -1,0 +1,20 @@
+{
+  "name": "ghci-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pedro Tacla Yamada",
+  "dependencies": {
+    "bluebird": "^3.1.2",
+    "browserify-middleware": "^7.0.0",
+    "byline": "^4.2.1",
+    "express": "^4.13.4",
+    "jquery": "^2.2.0",
+    "jquery.terminal": "^0.9.3",
+    "socket.io": "^1.4.4",
+    "superagent": "^1.7.1"
+  }
+}

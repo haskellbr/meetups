@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GHCi Web</title>
+    <link href="/static/node_modules/jquery.terminal/css/jquery.terminal-0.9.3.css" rel="stylesheet"/>
+    <style>
+     body, html {
+       background: #3EB3C7;
+       margin: 10px;
+       padding: 0;
+       color: white;
+       font-family: sans-serif;
+       height: 80vh;
+     }
+
+     .terminal-output > div.command {
+       color: white;
+     }
+
+     .terminal-output > div {
+       color: #aaa;
+     }
+
+     .sprint-drawer {
+       position: absolute;
+       background-color: white;
+       bottom: 0;
+       width: 400px;
+       height: auto;
+       color: #666666;
+       padding: 10px;
+       right: 0;
+     }
+
+     .sprint-drawer h3 {
+       padding: 0;
+       margin: 0;
+     }
+
+     .sprint-drawer ul {
+       list-style: none;
+       margin: 0;
+       padding: 0;
+     }
+
+     .sprint-drawer li {
+       font-size: 1.3em;
+       margin: 3px;
+       animation: sprint-update-animation .3s linear forwards;
+     }
+
+     .sprint-drawer .form {
+       display: none;
+       margin-left: 10px;
+       font-weight: bolder;
+     }
+
+     .sprint-drawer.annotations .form {
+       display: initial;
+     }
+
+     .sprint-drawer.annotations .nf {
+       border: solid 2px pink;
+     }
+
+     .sprint-drawer.annotations .whnf {
+       border: solid 2px blue;
+     }
+
+     @keyframes sprint-update-animation {
+       from {
+         background-color: yellow;
+       }
+
+       to {
+         background-color: initial;
+       }
+     }
+    </style>
+  </head>
+  <body>
+    <div class="terminal"></div>
+    <div class="sprint-drawer">
+      <div style="float: right">
+        <a href="#" class="clear-variables">limpar</a>
+        <label for="activate-form-annotations">mostrar a forma</label>
+        <input name="activate-form-annotations" type="checkbox" class="activate-form-annotations" />
+      </div>
+      <h3>Variáveis:</h3>
+      <ul></ul>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/index.js"></script>
+  </body>
+</html>
