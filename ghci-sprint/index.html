@@ -14,17 +14,52 @@
        height: 80vh;
      }
 
-     .terminal-output > div.command {
-       color: white;
+     a,
+     .terminal a {
+       color: #3EB3C7;
+       text-decoration: none;
+     }
+
+     a:hover,
+     .terminal a:hover {
+       color: #3E92C7;
+       text-decoration: underline;
+     }
+
+     .terminal {
+       background-color: white;
+     }
+
+     .terminal .cmd {
+       background-color: white;
+     }
+
+     .terminal .terminal-output > div.command {
+       color: #666;
+     }
+
+     .terminal .terminal-output > div.command + div:nth-last-child(1) {
+       background-color: rgba(217, 209, 70, 0.24);
+       font-weight: bold;
+       /* background-color:  */
+     }
+
+     .terminal .cmd span.prompt > span {
+       color: #85D689;
+       font-weight: bold !important;
+     }
+
+     .terminal .cmd {
+       color: #333;
      }
 
      .terminal-output > div {
-       color: #aaa;
+       color: #888;
      }
 
      .sprint-drawer {
        position: absolute;
-       background-color: white;
+       background-color: #eee;
        bottom: 0;
        width: 400px;
        height: auto;
@@ -57,7 +92,7 @@
      }
 
      .sprint-drawer.annotations .form {
-       display: initial;
+       display: block;
      }
 
      .sprint-drawer.annotations .nf {
@@ -65,7 +100,7 @@
      }
 
      .sprint-drawer.annotations .whnf {
-       border: solid 2px blue;
+       border: solid 2px #85D689;
      }
 
      @keyframes sprint-update-animation {

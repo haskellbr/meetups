@@ -70,3 +70,7 @@ var term = $('.terminal').terminal(function(command) {
 socket.on('echo', function(data) {
   term.echo(data);
 });
+
+socket.on('gError', function(data) {
+  term.error(data);
+});

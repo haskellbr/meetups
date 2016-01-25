@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GHCi Web</title>
+    <link href="/static/node_modules/jquery.terminal/css/jquery.terminal-0.9.3.css" rel="stylesheet"/>
+    <style>
+     body, html {
+       background: #3EB3C7;
+       margin: 10px;
+       padding: 0;
+       color: white;
+       font-family: sans-serif;
+       height: 80vh;
+     }
+
+     a,
+     .terminal a {
+       color: #3EB3C7;
+       text-decoration: none;
+     }
+
+     a:hover,
+     .terminal a:hover {
+       color: #3E92C7;
+       text-decoration: underline;
+     }
+
+     .terminal {
+       background-color: white;
+     }
+
+     .terminal .cmd {
+       background-color: white;
+     }
+
+     .terminal .terminal-output > div.command {
+       color: #666;
+     }
+
+     .terminal .terminal-output > div.command + div:nth-last-child(1) {
+       background-color: rgba(217, 209, 70, 0.24);
+       font-weight: bold;
+       /* background-color:  */
+     }
+
+     .terminal .cmd span.prompt > span {
+       color: #85D689;
+       font-weight: bold !important;
+     }
+
+     .terminal .cmd {
+       color: #333;
+     }
+
+     .terminal-output > div {
+       color: #888;
+     }
+
+     .threads-drawer {
+       position: absolute;
+       background-color: white;
+       bottom: 0;
+       width: 400px;
+       height: auto;
+       color: #666666;
+       padding: 10px;
+       right: 0;
+     }
+
+     .threads-drawer h3 {
+       padding: 0;
+       margin: 0;
+     }
+
+     .threads-drawer ul {
+       list-style: none;
+       margin: 0;
+       padding: 0;
+     }
+
+     .threads-drawer .threads li .state {
+       display: block;
+     }
+
+     .threads-drawer .threads li.running {
+       border: solid 2px #85D689;
+     }
+
+     .threads-drawer .threads li.stopped {
+       border: solid 2px pink;
+     }
+
+     .threads-drawer .mvars li {
+       font-size: 1.3em;
+       margin: 3px;
+       animation: threads-update-animation .3s linear forwards;
+     }
+
+     .threads-drawer .form {
+       display: none;
+       margin-left: 10px;
+       font-weight: bolder;
+     }
+
+     .threads-drawer .mvars li.empty {
+       display: block;
+       border: solid 2px pink;
+     }
+
+     .threads-drawer .mvars li {
+       border: solid 2px #85D689;
+     }
+
+     @keyframes threads-update-animation {
+       from {
+         background-color: yellow;
+       }
+
+       to {
+         background-color: initial;
+       }
+     }
+    </style>
+  </head>
+  <body>
+    <div class="terminal"></div>
+    <div class="threads-drawer">
+      <div style="float: right">
+        <a href="#" class="clear-mvars">clear</a>
+      </div>
+      <div class="threads">
+        <h3>Threads:</h3>
+        <ul></ul>
+      </div>
+      <div class="mvars">
+        <h3>MVars:</h3>
+        <ul></ul>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/index.js"></script>
+  </body>
+</html>

@@ -30,7 +30,7 @@ io.on('connection', function(socket) {
     if(data === '>') return;
     data = data.replace(/^(> ?)+/g, '');
     console.log('Writting ' + name, data, 'to socket');
-    socket.emit(nextEvent, data);
+    socket.emit(name !== 'stderr' ? nextEvent : 'gError', data);
   }
 
   ghciStdoutByLine.on('data', handleGhciData.bind(null, 'stdout'));
