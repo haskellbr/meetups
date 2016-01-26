@@ -1,10 +1,9 @@
 # haskellbr/meetups
-This is a mega-repository which aggregates as much information as it can about
-HaskellBR meetups.
+Esse é um mega-repositório que agrega quanta informação quanto puder sobre os
+meetups da HaskellBR.
 
-## License
-All content under this repository may be sub-licensed under different licenses.
-It's up to the authors what to publish here and under which terms. All
-unlicensed code should be considered to be published under the MIT license.
+## Licença
+Todo o conteúdo nesse repositório pode ser sub-licenciado sobre licenças
+diferentes.
 
-Refer to the [LICENSE](/LICENSE) file for more information.
+O conteúdo sem licenças explícitas está publicado sob a licença MIT.
