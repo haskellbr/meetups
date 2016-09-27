@@ -1,0 +1,11 @@
+{
+  "name": "javascript-dataloader-example",
+  "author": "Pedro Tacla Yamada",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "dataloader": "^1.2.0",
+    "fetch": "^1.1.0",
+    "isomorphic-fetch": "^2.2.1"
+  }
+}
