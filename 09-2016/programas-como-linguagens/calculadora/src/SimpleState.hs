@@ -65,6 +65,6 @@ main = do
         case exprStr of
             "" -> return ()
             _ -> do
-                eret <- runExceptT (evalExpr (read exprStr)) :: StateT (Map String Int) IO (Either String Int)
+                eret <- runExceptT (evalExpr (read exprStr))
                 lift $ print eret
         loop
