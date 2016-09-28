@@ -10,7 +10,6 @@ extra-source-files:
 dependencies:
 - base >=4 && <5
 - haxl
-- wreq
 - hashable
 - lens
 - text
@@ -18,5 +17,12 @@ dependencies:
 - async
 
 executables:
-  haskell-haxl-example:
-    main: Main.hs
+  haxl-caching-example:
+    main: CachingExample.hs
+    dependencies:
+    - wreq
+
+  haxl-sqlite-batching-example:
+    main: BatchingExample.hs
+    dependencies:
+    - sqlite-simple
