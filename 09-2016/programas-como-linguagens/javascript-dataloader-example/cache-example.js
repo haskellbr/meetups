@@ -4,19 +4,24 @@ const fetch = require('isomorphic-fetch');
 
 function loggedFetch(url, options) {
   console.log('fetching', url, '...');
-  return fetch(url, options);
+  return fetch(url, options).then(res => {
+    return res.text()
+  }).then(text => {
+    console.log('fetched', url);
+    return text;
+  });
 }
 
 const loader = new DataLoader((urls) => {
   const seenUrls = {};
   return Promise.map(urls, (url) => {
-    return loggedFetch(url).then(res => res.text());
+    return loggedFetch(url);
   });
 });
 
-const p1 = loader.load('https://google.com');
-const p2 = loader.load('https://google.com');
-const p3 = loader.load('https://google.com');
+const p1 = loader.load('https://stackoverflow.com');
+const p2 = loader.load('https://stackoverflow.com');
+const p3 = loader.load('https://stackoverflow.com');
 const p4 = loader.load('https://beijaflor.io');
 
 Promise.join(p1, p2, p3, p4).spread((r1, r2, r3, r4) => {

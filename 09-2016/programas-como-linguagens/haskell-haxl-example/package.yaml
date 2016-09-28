@@ -1,0 +1,22 @@
+name: haskell-haxl-example
+version: '0.1.0.0'
+author: yamadapc
+maintainer: tacla.yamada@gmail.com
+license: BSD3
+
+extra-source-files:
+- ChangeLog.md
+
+dependencies:
+- base >=4 && <5
+- haxl
+- wreq
+- hashable
+- lens
+- text
+- bytestring
+- async
+
+executables:
+  haskell-haxl-example:
+    main: Main.hs
