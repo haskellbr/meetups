@@ -22,3 +22,4 @@ executables:
   haskell-web-repl:
     main: backend.hs
     source-dirs: '.'
+    ghc-options: -threaded -O2
