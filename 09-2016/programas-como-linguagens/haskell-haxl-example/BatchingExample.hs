@@ -147,16 +147,15 @@ instance DataSource a SqlQuery where
                   putStrLn ("fetched " ++ show sql)
                   mapM_ (uncurry putSuccess) (zip vars invoices)
 
+getInvoice i = dataFetch (GetInvoice i)
+getCustomer i = dataFetch (GetCustomer i)
+
 batchExample :: Haxl ([Invoice], [Customer])
 batchExample = do
-    (i1, i2, i3, i4) <- (,,,) <$>
-      dataFetch (GetInvoice 11) <*>
-      dataFetch (GetInvoice 9) <*>
-      dataFetch (GetInvoice 5) <*>
-      dataFetch (GetInvoice 222)
-    let invoices = [i1, i2, i3, i4]
+    invoices <- forM [11, 9, 5, 222] $ \invoiceId ->
+        getInvoice invoiceId
     customers <- forM invoices $ \Invoice{..} ->
-      dataFetch (GetCustomer invoiceCustomerId)
+        getCustomer invoiceCustomerId
     return (invoices, customers)
 
 main :: IO ()
