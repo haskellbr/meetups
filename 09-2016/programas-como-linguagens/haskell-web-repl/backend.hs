@@ -1,4 +1,3 @@
--- stack runghc --package aeson --package bytestring-0.10.8.1 --package websockets --package conduit-extra --package conduit
 {-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
