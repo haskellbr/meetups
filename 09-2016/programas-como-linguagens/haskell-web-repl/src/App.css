@@ -1,5 +1,4 @@
 body {
-  background-color: white;
   height: 100%;
   width: 100%;
   padding: 10px;
@@ -25,14 +24,23 @@ body {
   box-sizing: border-box;
 }
 
+.App .ReactCodeMirror {
+  height: 100%;
+}
+
+.App .CodeMirror {
+  background: #1d1714 !important;
+  height: 100%;
+}
+
 .CodeMirror-gutters {
-  background: transparent;
+  background: #1d1714 !important;
 }
 
 .react-grid-item:not(.react-grid-placeholder) {
+  overflow: scroll;
   background-color: #f7f7f7;
   border: 5px solid #d8d8d8;
-  padding: 5px;
   box-shadow: 0 0 6px 0px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
 }
@@ -71,4 +79,41 @@ body {
 .App .react-console-container {
   height: 100%;
   background: transparent;
+}
+
+.BuildLogs {
+  padding: 10px;
+  background: #1d1714 !important;
+  font-family: monospace;
+}
+
+.command {
+  color: RGBA(41, 171, 226, 1.00);
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.command:before {
+  color: #eee;
+  content: "$ ";
+}
+
+.compile {
+  color: rgba(255, 245, 194, 1);
+}
+
+.stderr {
+  color: #aaa !important;
+  opacity: 0.7;
+}
+
+.stdout {
+  font-size: 1.2em;
+  padding-left: 6px;
+  margin: 3px 0;
+  color: white !important;
+}
+
+.run {
+  color: rgba(66, 187, 82, 1);
 }

@@ -57,6 +57,7 @@
     "react-dom": "^15.3.2",
     "react-flexbox-grid": "^0.10.2",
     "react-grid-layout": "^0.13.6",
+    "reconnecting-websocket": "^2.0.0",
     "sass-loader": "^4.0.2"
   },
   "scripts": {
