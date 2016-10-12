@@ -49,13 +49,15 @@ instance DataSource a HttpReq where
             putStrLn ("fetched " ++ url)
             putSuccess resultVar (view responseBody res :: ByteStringL.ByteString)
 
+getUrl url = dataFetch (GetUrl url)
+
 cacheExample :: Haxl [ByteStringL.ByteString]
 cacheExample = do
     (r1, r2, r3, r4) <- (,,,) <$>
-      dataFetch (GetUrl "https://stackoverflow.com") <*>
-      dataFetch (GetUrl "https://stackoverflow.com") <*>
-      dataFetch (GetUrl "https://stackoverflow.com") <*>
-      dataFetch (GetUrl "https://beijaflor.io")
+      getUrl "https://stackoverflow.com" <*>
+      getUrl "https://stackoverflow.com" <*>
+      getUrl "https://stackoverflow.com" <*>
+      getUrl "https://beijaflor.io"
     return [r1, r2, r3, r4]
 
 main :: IO ()

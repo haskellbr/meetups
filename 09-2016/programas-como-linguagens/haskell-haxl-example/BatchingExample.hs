@@ -9,6 +9,7 @@
 module Main where
 
 import           Control.Concurrent.Async
+import           Control.Lens
 import qualified Data.ByteString.Lazy     as ByteStringL
 import           Data.Hashable
 import           Data.List
@@ -19,7 +20,6 @@ import qualified Data.Text.IO             as Text
 import           Data.Typeable
 import           Database.SQLite.Simple
 import           Haxl.Core
-import           Haxl.Prelude (forM)
 
 type Haxl = GenHaxl ()
 
@@ -47,41 +47,8 @@ instance FromRow Invoice where
               <*> field
               <*> field
 
-data Customer = Customer { customerId :: Int
-                         , customerFirstName :: Text
-                         , customerLastName :: Text
-                         , customerCompany :: Maybe Text
-                         , customerAddr :: Maybe Text
-                         , customerCity :: Maybe Text
-                         , customerState :: Maybe Text
-                         , customerCountry :: Maybe Text
-                         , customerPostalCode :: Maybe Text
-                         , customerPhone :: Maybe Text
-                         , customerFax :: Maybe Text
-                         , customerEmail :: Text
-                         , customerSupportRepId :: Int
-                         }
-  deriving(Show, Read)
-
-instance FromRow Customer where
-    fromRow = Customer
-              <$> field
-              <*> field
-              <*> field
-              <*> field
-              <*> field
-              <*> field
-              <*> field
-              <*> field
-              <*> field
-              <*> field
-              <*> field
-              <*> field
-              <*> field
-
 data SqlQuery r where
     GetInvoice :: Int -> SqlQuery Invoice
-    GetCustomer :: Int -> SqlQuery Customer
   deriving (Typeable)
 
 deriving instance Eq (SqlQuery a)
@@ -90,9 +57,7 @@ instance Show1 SqlQuery where show1 = show
 
 instance Hashable (SqlQuery a) where
     hashWithSalt s (GetInvoice u) =
-        hashWithSalt s [u, 0]
-    hashWithSalt s (GetCustomer u) =
-        hashWithSalt s [u, 1]
+        hashWithSalt s u
 
 instance StateKey SqlQuery where
     data State SqlQuery = SqlState { ssConn :: Connection
@@ -103,70 +68,47 @@ instance DataSourceName SqlQuery where
 
 instance DataSource a SqlQuery where
     fetch SqlState{..} _flags _userEnv blockedFetches = AsyncFetch $ \idle -> do
-        p1 <- runInvoiceReqs blockedFetches
-        p2 <- runCustomerReqs blockedFetches
+        p <- runReqs blockedFetches
         idle
-        mapM_ wait [p1, p2]
+        wait p
       where
-        runCustomerReqs :: [BlockedFetch SqlQuery] -> IO (Async ())
-        runCustomerReqs bs = async $ do
-            let customerIds :: [Int]
-                vars :: [ResultVar Customer]
-                (customerIds, vars) = unzip
-                  [ (customerId, resultVar) | (BlockedFetch r@(GetCustomer customerId) resultVar) <- bs ]
-                sql :: String
-                sql = unwords $ [ "SELECT * FROM Customers WHERE CustomerId IN ("
-                                , (intercalate "," (map show customerIds))
-                                ,  ")"
-                                ]
-            case customerIds of
-                [] -> return ()
-                _ -> do
-                    putStrLn ("querying " ++ show sql ++ "...")
-                    invoices <- query_ ssConn (Query (Text.pack sql)) :: IO [Customer]
-                    putStrLn ("fetched " ++ show sql)
-                    mapM_ (uncurry putSuccess) (zip vars invoices)
-
-        runInvoiceReqs :: [BlockedFetch SqlQuery] -> IO (Async ())
-        runInvoiceReqs bs = async $ do
-            let invoiceIds :: [Int]
+        runReqs :: [BlockedFetch SqlQuery] -> IO (Async ())
+        runReqs bs = async $ do
+            let ids :: [Int]
                 vars :: [ResultVar Invoice]
-                (invoiceIds, vars) = unzip
+                (ids, vars) = unzip
                   [ (invoiceId, resultVar) | (BlockedFetch r@(GetInvoice invoiceId) resultVar) <- bs ]
                 sql :: String
                 sql = unwords $ [ "SELECT * FROM Invoices WHERE InvoiceId IN ("
-                                , (intercalate "," (map show invoiceIds))
+                                , (intercalate "," (map show ids))
                                 ,  ")"
                                 ]
 
-            case invoiceIds of
-                [] -> return ()
-                _ -> do
-                  putStrLn ("querying " ++ show sql ++ "...")
-                  invoices <- query_ ssConn (Query (Text.pack sql)) :: IO [Invoice]
-                  putStrLn ("fetched " ++ show sql)
-                  mapM_ (uncurry putSuccess) (zip vars invoices)
+            putStrLn ("querying " ++ show ids ++ "...")
+            invoices <- query_ ssConn (Query (Text.pack sql)) :: IO [Invoice]
+            print invoices
+            putStrLn ("fetched " ++ show ids)
 
-getInvoice i = dataFetch (GetInvoice i)
-getCustomer i = dataFetch (GetCustomer i)
+            mapM_ (uncurry putSuccess) (zip vars invoices)
 
-batchExample :: Haxl ([Invoice], [Customer])
+batchExample :: Haxl [Invoice]
 batchExample = do
-    invoices <- forM [11, 9, 5, 222] $ \invoiceId ->
-        getInvoice invoiceId
-    customers <- forM invoices $ \Invoice{..} ->
-        getCustomer invoiceCustomerId
-    return (invoices, customers)
+    (r1, r2, r3, r4) <- (,,,) <$>
+      dataFetch (GetInvoice 11) <*>
+      dataFetch (GetInvoice 9) <*>
+      dataFetch (GetInvoice 5) <*>
+      dataFetch (GetInvoice 222)
+    return [r1, r2, r3, r4]
 
 main :: IO ()
 main = do
     conn <- open "./chinook.db"
-    -- setTrace conn (Just (\q -> Text.putStrLn q))
+    setTrace conn (Just (\q -> Text.putStrLn q))
     let stateStore = stateSet SqlState { ssConn = conn
                                        } stateEmpty
     env0 <- initEnv stateStore ()
-    ([i1, i2, i3, i4], [c1, c2, c3, c4]) <- runHaxl env0 batchExample
-    putStrLn $ "  i1 -> " <> show i1
-    putStrLn $ "  i2 -> " <> show i2
-    putStrLn $ "  i3 -> " <> show i3
-    putStrLn $ "  i4 -> " <> show i4
+    [r1, r2, r3, r4] <- runHaxl env0 batchExample
+    putStrLn $ "  r1 -> " <> show r1
+    putStrLn $ "  r2 -> " <> show r2
+    putStrLn $ "  r3 -> " <> show r3
+    putStrLn $ "  r4 -> " <> show r4
